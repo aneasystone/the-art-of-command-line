@@ -12,7 +12,7 @@
 - [Sistemsko razhroščevanje](#sistemsko-razhroščevanje)
 - [V eni vrstici](#v-eni-vrstici)
 - [Nepregledno vendar uporabno](#nepregledno-vendar-uporabno)
-- [Samo za MacOS](#samo-za-macos)
+- [Samo za MacOS X](#samo-za-macos-x)
 - [Več virov](#več-virov)
 - [Pogoji uporabe](#pogoji-uporabe)
 
@@ -33,7 +33,7 @@ vendar glede na dani interes tu, izgleda vredno uporabe GitHub-a, kjer ljudje bo
 Obseg:
 
 - Ta vodič je tako za začetnike kot za poznavalce. Cilji so *širina* (vse pomembno), *specifičnost* (podaja konkretne primere najpogostejših primerov uporabe) in *kratkost* (izogiba se stvarem, ki niso bistvene ali se odmikajo, kar lahko enostavno pogledate drugje). Vsak nasvet je bistven v določeni situaciji ali bistveno prihrani čas pred alternativami.
-- To je napisano za Linux z izjemo sekcije "[Samo za MacOS](#samo-za-macos)". Mnogi ostali elementi veljajo ali pa so lahko nameščeni na drugih Unix-ih ali MacOS (ali celo Cygwin).
+- To je napisano za Linux z izjemo sekcije "[Samo za MacOS X](#samo-za-macos-x)". Mnogi ostali elementi veljajo ali pa so lahko nameščeni na drugih Unix-ih ali MacOS (ali celo Cygwin).
 - Poudarek je na interaktivnosti Bash-a, čeprav mnogo nasvetov velja za ostale lupine in splošno skriptanje Bash-a.
 - Vključuje tako "standardne" ukaze Unix-a kot tudi tiste, ki zahtevajo namestitev posebnih paketov -- dokler so dovolj pomembni, da zaslužijo vključitev.
 
@@ -63,14 +63,14 @@ Opombe:
 
 - Osnovno upravljanje omrežja: `ip` or `ifconfig`, `dig`.
 
-- Poznajte tudi splošne izraze in različne zastavice za `grep`/`egrep`. Opcije `-i`, `-o`, `-A` in `-B` so vredne znanja.
+- Poznajte tudi splošne izraze in različne zastavice za `grep`/`egrep`. Opcije `-i`, `-o`, `-v`, `-A`, `-B` in `-C` so vredne poznavanja.
 
 - Naučite se uporabljati `apt-get`, `yum`, `dnf` ali `pacman` (odvisno od distribucije), da najdete in namestite pakete. In zagotovite, da imate `pip`, da lahko nameščate orodja ukazne vrstice na osnovi Python-a (nekaj spodnjih je najenostavneje namestiti preko `pip`).
 
 
 ## Vsakodnevna uporaba
 
-- V Bash-u uporabite **Tab** za dokončanje argumentov in **ctrl-r**, da iščete skozi zgodovino ukazov.
+- V Bash-u uporabite **Tab** za dokončanje argumentov in **ctrl-r**, da iščete skozi zgodovino ukazov (po pritiski, vtipkajte za iskanje, pritisnite **ctrl-r** s ponavljanjem za kroženje skozi več ujemanj, pritisnite **Enter**, da izvršite najdeni ukaz, ali pritisnite desno puščico, da date trenutni rezultat v trenutno vrstico in omogočite urejanje).
 
 - V Bash-u uporabite **ctrl-w**, da izbrišete zadnjo besedo in **ctrl-u**, da izbrišete vse do začetka vrstice. Uporabite **alt-b** in **alt-f**, da se premikate po besedah, **ctrl-a**, da premaknete kurzor na začetek vrstice, **ctrl-e**, da premaknete kurzor na konec vrstice, **ctrl-k**, da ubijete do začetka vrstice, **ctrl-l**, da počistite zaslon. Glejte `man readline` za vse privzete vezave tipk v Bash-u. Na voljo jih je veliko. Na primer **alt-.** kroži skozi prejšnje argumente in **alt-*** razširi glob.
 
@@ -99,6 +99,8 @@ Opombe:
 - Preverite, kateri procesi se poslušajo preko `netstat -lntp` ali `ss -plat` (za TCP; dodajte `-u` za UDP).
 
 - Glejte tudi `lsof` za odprte priključke in datoteke.
+
+- Glejte `uptime` ali `w`, da izveste, koliko časa se sistem poganja.
 
 - Uporabite `alias`, da ustvarite bližnjice za pogosto uporabljene ukaze. Na primer, `alias ll='ls -latr'` ustvari nov alias `ll`.
 
@@ -168,7 +170,7 @@ Opombe:
 
 - Če morate upravljati z XML, je `xmlstarlet` star vendar dober.
 
-- Za JSON, use `jq`.
+- Za JSON, use [`jq`](http://stedolan.github.io/jq/).
 
 - Za Excel ali CSV datoteke, [csvkit](https://github.com/onyxfish/csvkit) ponuja `in2csv`, `csvcut`, `csvjoin`, `csvgrep` itd.
 
@@ -227,13 +229,15 @@ Opombe:
 
 - Za spletno razhroščevanje, sta priročna `curl` in `curl -I` ali pa njun ekvivalent `wget`, ali bolj moderen [`httpie`](https://github.com/jakubroztocil/httpie).
 
-- Da izveste status diska/procesorja/omrežja, uporabite `iostat`, `netstat`, `top` (ali bolje `htop`) in (posebno) `dstat`. Dobro za dobiti hitro idejo, kaj se dogaja na sistemu.
+- Da izveste trenutni status diska/procesorja/omrežja, so na voljo klasična orodja `top`, (ali bolje `htop`), `iostat` in `iotop` . Uporabite `iostat -mxz 15` za osnovno statistiko CPU in podrobno na particijo statistiko diska in vpogled v uspešnost.
 
-- Za hiter podrobnejši pregled sistema uporabite [`glances`](https://github.com/nicolargo/glances). Predstavi vam nekaj statistik nivoja sistema v enem oknu terminala. Zelo uporabno za hitro preverjanje na različnih podsistemih.
+- Za podrobnosti omrežne povezave uporabite `netstat` in `ss`.
+
+- Za hiter pregled, kaj se dogaja na sistemu, je `dstat` posebno uporaben. Za širši pregled s podrobnostmi uporabite [`glances`](https://github.com/nicolargo/glances).
 
 - Da izveste status spomina, poženite in razumite izpis `free` in `vmstat`. Še posebej bodite pozorni, da je vrednost "cached" držana v spominu s strani jedra Linux-a kot datoteka predpomnilnika, tako da efektivno šteje proti vrednosti "free".
 
-- Sistemsko razhroščevanje Java je drugačen tip, vendar enostaven trik na JVM-jih Oracle-a in nekaterih ostalih je, da lahko poženete `kill -3 <pid>` in sledite celotnemu stack-u in povzetku kopic (vključno s podrobnostmi zbirke splošnih smeti, ki so lahko zelo informativne), ki bodo oddane v stderr/logs.
+- Sistemsko razhroščevanje Java je drugačen tip, vendar enostaven trik na JVM-jih Oracle-a in nekaterih ostalih je, da lahko poženete `kill -3 <pid>` in sledite celotnemu stack-u in povzetku kopic (vključno s podrobnostmi zbirke splošnih smeti, ki so lahko zelo informativne), ki bodo oddane v stderr/logs. JDK-jevi `jps`, `jstat`, `jstack`, `jmap` so uporabni. [SJK Tools](https://github.com/aragozin/jvm-tools) so bolj napredni.
 
 - Uporabite `mtr` kot boljši usmerjevalnik sledenja za identifikacijo težav omrežja.
 
@@ -251,7 +255,7 @@ Opombe:
 
 - Vedite, kako se povezati k procesu v pogonu z `gdb` in dobiti njegove sledi skladovnice.
 
-- Uporabite `/proc`. Včasih je izjemno v pomoč, ko se razhroščuje probleme v živo. Primeri: `/proc/cpuinfo`, `/proc/xxx/cwd`, `/proc/xxx/exe`, `/proc/xxx/fd/`, `/proc/xxx/smaps`.
+- Uporabite `/proc`. Včasih je izjemno v pomoč, ko se razhroščuje probleme v živo. Primeri: `/proc/cpuinfo`, `/proc/meminfo`, `/proc/cmdline`, ``/proc/xxx/cwd`, `/proc/xxx/exe`, `/proc/xxx/fd/`, `/proc/xxx/smaps` (kjer je `xxx` id procesa ali pid).
 
 - Ko se razhroščuje, zakaj je šlo nekaj narobe v preteklosti, je lahko zelo uporaben `sar`. Prikazuje statistiko zgodovine na procesorju, spominu, omrežju itd.
 
@@ -286,16 +290,12 @@ Nekaj primerov sestavljanja ukazov skupaj:
       find . -type f -ls
 ```
 
-- Uporabite `xargs` ali `parallel` kadarkoli lahko. Bodite pozorni, saj lahko kontrolirate kolikokrat izvršite na vrstico (`-L`) kot tudi paralelnost (`-P`). Če niste prepričani, da bo naredilo pravilno stvar, uporabite najprej xargs echo. Priročen je tudi `-I{}`. Primeri:
-```sh
-      find . -name '*.py' | xargs grep some_function
-      cat hosts | xargs -I{} ssh root@{} hostname
-```
-
 - Recimo, da imate tekstovno datoteko, kot dnevnik spletnega strežnika in določena vrednost se pojavi na nekaterih vrsticah, kot parameter `acct_id`, ki je prisoten v URL-ju. Če želite ujemanja, koliko je zahtevkov za vsak `acct_id`:
 ```sh
       cat access.log | egrep -o 'acct_id=[0-9]+' | cut -d= -f2 | sort | uniq -c | sort -rn
 ```
+
+- Da neprekinjeno nadzirate spremembe, uporabite `watch`, npr. preverite spremembe datotek v direktoriju z `watch -d -n 2 'ls -rtlh | tail'` ali med odpravljanjem težav vaših nastavitev wifi z `watch -d -n 2 ifconfig`.
 
 - Poženite to funkcijo, da dobite naključni nasvet iz tega dokumenta (razčleni Markdown in izvleče element):
 ```sh
@@ -333,7 +333,7 @@ Nekaj primerov sestavljanja ukazov skupaj:
 
 - `fold`: ovije vrstice teksta
 
-- `column`: oblikuje tekst v stolpce ali tabele
+- `column`: oblikuje tekstovna polja v poravnane stolpce s fiksno širino ali tabele
 
 - `expand` in `unexpand`: pretvori med tabulatorji in presledki
 
@@ -345,7 +345,7 @@ Nekaj primerov sestavljanja ukazov skupaj:
 
 - `factor`: celo številski faktorji
 
-- `gpg`: enkriptira in podpiše datoteke
+- [`gpg`](https://gnupg.org/): enkriptira in podpiše datoteke
 
 - `toe`: tabela vnosov terminfo
 
@@ -353,7 +353,7 @@ Nekaj primerov sestavljanja ukazov skupaj:
 
 - `socat`: rele vtičnice in odpravnik tcp porta (podobno kot `netcat`)
 
-- `slurm`: vizualizacija prometa omrežja
+- [`slurm`](https://github.com/mattthias/slurm): vizualizacija prometa omrežja
 
 - `dd`: premikanje podatkov med datotekami in napravami
 
@@ -362,6 +362,10 @@ Nekaj primerov sestavljanja ukazov skupaj:
 - `tree`: prikaže direktorije in poddirektorije kot gnezdeno drevo; kot `ls` vendar rekurzivno
 
 - `stat`: informacije datoteke
+
+- `time`: izvrši in da ukaz v čas
+
+- `watch`: večkrat požene ukaz in prikazuje rezultate in/ali poudari spremembe
 
 - `tac`: izpiše datoteke v obratnem redu
 
@@ -399,7 +403,7 @@ Nekaj primerov sestavljanja ukazov skupaj:
 
 - `cssh`: vizualna sočasna lupina
 
-- `rsync`: sinhronizacija datotek in map preko SSH
+- `rsync`: sinhronizacija datotek in map preko SSH ali v lokalnem datotečnem sistemu
 
 - `wireshark` in `tshark`: zajem paketov in razhroščevanje omrežja
 
@@ -413,7 +417,11 @@ Nekaj primerov sestavljanja ukazov skupaj:
 
 - [`glances`](https://github.com/nicolargo/glances): visoko nivojski, večkratni podsistemski pregled
 
-- `iostat`: statistika procesorja in diska
+- `iostat`: statistika uporabe diska
+
+- `mpstat`: statistika uporabe procesorja
+
+- `vmstat`: statistika uporabe spomina
 
 - `htop`: izboljšana verzija top
 
@@ -431,6 +439,8 @@ Nekaj primerov sestavljanja ukazov skupaj:
 
 - `dmesg`: sporočila napak zagona in sistema
 
+- `sysctl`: ogled in nastavitev parametrov jedra Linux pri pogonu
+
 - `hdparm`: manipulacija/uspešnost SATA/ATA disk-a
 
 - `lsb_release`: informacije distribucije Linux
@@ -439,16 +449,20 @@ Nekaj primerov sestavljanja ukazov skupaj:
 
 - `lshw`, `lscpu`, `lspci`, `lsusb`, `dmidecode`: informacije strojne opreme, vključno s procesorjem, BIOS-om, RAID-om, grafiko, napravami itd.
 
+- `lsmod` in `modinfo`: izpišeta in prikažeta podrobnosti o modulih jedra.
+
 - `fortune`, `ddate` in `sl`: hm, torej zavisi glede na to ali smatrate parne lokomotive in dinamične kotacije "uporabne"
 
 
-## Samo za MacOS
+## Samo za MacOS X
 
 To so elementi pomembni *samo* za MacOS.
 
 - Upravljanje paketov z `brew` (Homebrew) in/ali `port` (MacPorts). Te so lahko uporabljeni za namestitev mnogih zgornjih ukazov na MacOS.
 
 - Kopirajte izpis katerega koli ukaza na namizno aplikacijo s `pbcopy` in prilepite vnos iz ene s `pbpaste`.
+
+- Da omogočite uporabo topke Option v Mac OS Terminalu kot tipka alt (kot je uporabljena v ukazih zgoraj kot **alt-b**, **alt-f** itd), odprite Preferences -> Profiles -> Keyboard in izberite "Use Option as Meta key".
 
 - Da odprete datoteko z namizno aplikacijo, uporabite `open` ali `open -a /Applications/Whatever.app`.
 
@@ -461,7 +475,7 @@ To so elementi pomembni *samo* za MacOS.
 
 - [awesome-shell](https://github.com/alebcay/awesome-shell): urejan seznam orodij lupine in virov.
 - [Strict mode](http://redsymbol.net/articles/unofficial-bash-strict-mode/) za pisanje boljših skript lupine.
-
+- [shellcheck](https://github.com/koalaman/shellcheck) - lupinska skripta orodja statične analize. V osnovi, lint za bash/sh/zsh.
 
 ## Pogoji uporabe
 
